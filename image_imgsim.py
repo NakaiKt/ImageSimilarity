@@ -156,22 +156,23 @@ def img_sim_folder(files1, files2, write = False):
     return dist_matrix
 
 if __name__ == '__main__':
+    csv_folder = "/result/imgsim/"
     table_name = "inou_figre"
     print(table_name)
     matrix = img_sim_folder(file_inou_figre, file_inou_figre)
-    write_csv(table_name + ".csv", matrix)
+    write_csv(csv_folder + table_name + ".csv", matrix)
 
     table_name = "inou_home"
     print("\n", table_name)
     matrix = img_sim_folder(file_inou_home, file_inou_home)
-    write_csv(table_name + ".csv", matrix)
+    write_csv(csv_folder + table_name + ".csv", matrix)
 
     table_name = "inou_figre_other"
     print("\n", table_name)
     matrix = img_sim_folder(file_inou_figre, file_other)
-    write_csv(table_name + ".csv", matrix)
+    write_csv(csv_folder + table_name + ".csv", matrix)
 
     table_name = "inou_home_other"
     print("\n", table_name)
     matrix = img_sim_folder(file_inou_home, file_other)
-    write_csv(table_name + ".csv", matrix)
+    write_csv(csv_folder + table_name + ".csv", matrix)
