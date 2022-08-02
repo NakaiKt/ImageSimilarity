@@ -1,11 +1,62 @@
 # ImageSimilarity
 伊能忠敬像および旧伊能忠敬邸と他の画像との類似度を検証
+行った検証は
+* imgsim
+* opencv AKAZA
+* ImageHash
+
+## imgsim
+[github](https://github.com/chenmingxiang110/AugNet)
+[paper](https://arxiv.org/abs/2106.06250)
+AugNet[^1] というモデルによる画像分類手法．（AugはAugmentationから）
+画像の一部のみ切り出す水増し手法によって，同じ画像の異なる領域に類似性を見出そうとした手法．
+画像を192次元のベクトルに落とし込み，l2normなどで類似度を出す．
+**背景寄与が大きい**（論文いわく）
+
+|-|-|
+|------|-----|
+|dataset|ImageNet (minibarch 1024)
+|augment|回転，ガウシアンノイズ，クロップ，リサイズ，色相，彩度，明度，cutout
+|aug rate|8倍
+|crop size|32 x 32
+|architecture| NIN(Network In Network[^2]) 軽量モデル
+
+
+[^1]: Mingxiang Chen, Zhanguo Chang, Haonan Lu, Bitao Yang, Zhuang Li, Liufang Guo, Zhecheng Wang
+"AugNet: End-to-End Unsupervised Visual Representation Learning with Image Augmentation"
+arXiv:2106.06250, 11 jun 2021
+[^2]: Min Lin, Qiang Chen, Shuicheng Yan, "Network In Network", 10 pages, 4 figures, for iclr2014
+
+## openCV AKAZE
+[参考](https://miyashinblog.com/opencvakaze-knn/)
+（日本語の「風」が由来らしい）
+特許がなく，商用 / 非商用どちらでも．
+類似手法のSIFTやSURFは特許があるとのこと．
+**背景寄与が大きい**
+k-meansがベース．．．？？
+
+## ImageHash
+[公式](https://pypi.org/project/ImageHash/)
+元ネタは[hacherfactor](https://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html)というものらしい．
+暗号化ハッシュとは異なり，似た画像ほど近いハッシュ値になる．
+画像サイズ，アスペクト比，明度彩度に左右されにくいが，
+**背景寄与が大きい**
+
 
 ### result
 [imgsim](https://docs.google.com/spreadsheets/d/1AfFsY0MBBPsuoY6UXMPSBAcimj3Dx2OeJbljOpNNv-E/edit?usp=sharing)
 [imgsim grayscale](https://docs.google.com/spreadsheets/d/1OJKaNU1Snu0cZ-YROBK7s4_LnJdj-KwV8PrTceQrpXM/edit?usp=sharing)
 [opencv_AKAZE](https://docs.google.com/spreadsheets/d/1m0ezvB1kHl9bUtQ712vXakJxpDjSlkqAbh3YHJTUAtw/edit?usp=sharing)
 [ImageHash](https://docs.google.com/spreadsheets/d/1zt39OlvDaAteIf3u6aLK3i8LvTwBWJxdt8i9FIOabac/edit?usp=sharing)
+
+### 結論・今後
+**背景寄与が大きい**ことが難点．
+imagesimのような深層モデルは学習データがおそらくImageNet（一般画像）なので，
+ランドマークを集めたデータセットなどを見つけられれば再学習できるかも．
+また画像はカラーよりも白黒画像が良さそう．
+とにかくこれらだけで伊能忠敬像などを判別するのは難しそう．
+
+他の可能性として，GoogleのVisionAPI（有料）にある[LANDMARK_DETECTION](https://cloud.google.com/vision/docs/detecting-landmarks?hl=ja)や，案内板のようなもののテキスト検出などがあるのではないか．
 
 ### env
 Cuda compilation tools, release 11.7, V11.7.64
