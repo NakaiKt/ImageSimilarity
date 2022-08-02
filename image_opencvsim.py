@@ -67,21 +67,21 @@ def img_sim_folder(files1, files2, write_csv_file_name = None):
 
 if __name__ == '__main__':
     time_start = time.time()
-    img_sim_folder(file_inou_figre, file_inou_figre)
+    img_sim_folder(file_inou_figre, file_inou_figre, write_csv_file_name="inou_figre")
     time_end = time.time()
     print("実行時間(s) {}\n".format(time_end - time_start))
 
     time_start = time.time()
-    img_sim_folder(file_inou_home, file_inou_home)
+    img_sim_folder(file_inou_home, file_inou_home, write_csv_file_name="inou_home")
     time_end = time.time()
     print("実行時間(s) {}\n".format(time_end - time_start))
 
     time_start = time.time()
-    img_sim_folder(file_inou_figre, file_other)
+    img_sim_folder(file_inou_figre, file_other, write_csv_file_name="inou_figre_other")
     time_end = time.time()
     print("実行時間(s) {}\n".format(time_end - time_start))
 
     time_start = time.time()
-    img_sim_folder(file_inou_home, file_other)
+    img_sim_folder(file_inou_home, file_other, write_csv_file_name="inou_home_other")
     time_end = time.time()
     print("実行時間(s) {}\n".format(time_end - time_start))
