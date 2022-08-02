@@ -7,9 +7,13 @@
 [opencv_AKAZE](https://docs.google.com/spreadsheets/d/1m0ezvB1kHl9bUtQ712vXakJxpDjSlkqAbh3YHJTUAtw/edit?usp=sharing)
 
 ### env
-Windows 10
 Cuda compilation tools, release 11.7, V11.7.64
 Build cuda_11.7.r11.7/compiler.31294372_0
+|-|spec|
+|-------|----------|
+|cpu| Ryzen 7 1700X|
+|RAM| 8GB
+|GPU|GeForce GTX 1060 3G
 
 #####version
 Python 3.10.5
@@ -23,6 +27,7 @@ Python 3.10.5
 |cycler             |0.11.0
 |fonttools          |4.34.4
 |idna               |3.3
+|ImageHash          |4.2.1
 |imgsim             |0.1.2
 |kiwisolver         |1.4.4
 |matplotlib         |3.5.2
@@ -34,7 +39,9 @@ Python 3.10.5
 |pycodestyle        |2.9.0
 |pyparsing          |3.0.9
 |python-dateutil    |2.8.2
+|PyWavelets         |1.3.0
 |requests           |2.28.1
+|scipy              |1.9.0
 |setuptools         |58.1.0
 |six                |1.16.0
 |toml               |0.10.2
