@@ -49,7 +49,7 @@ k-meansがベース．．．？？
 [opencv_AKAZE](https://docs.google.com/spreadsheets/d/1m0ezvB1kHl9bUtQ712vXakJxpDjSlkqAbh3YHJTUAtw/edit?usp=sharing)
 [ImageHash](https://docs.google.com/spreadsheets/d/1zt39OlvDaAteIf3u6aLK3i8LvTwBWJxdt8i9FIOabac/edit?usp=sharing)
 
-### 結論・今後
+## Conclusion
 **背景寄与が大きい**ことが難点．
 imagesimのような深層モデルは学習データがおそらくImageNet（一般画像）なので，
 ランドマークを集めたデータセットなどを見つけられれば再学習できるかも．
