@@ -1,7 +1,16 @@
 # ImageSimilarity
-画像類似度を検証する
+伊能忠敬像および旧伊能忠敬邸と他の画像との類似度を検証
 
-### version
+### result
+[imgsim](https://docs.google.com/spreadsheets/d/1AfFsY0MBBPsuoY6UXMPSBAcimj3Dx2OeJbljOpNNv-E/edit?usp=sharing)
+[imgsim grayscale](https://docs.google.com/spreadsheets/d/1OJKaNU1Snu0cZ-YROBK7s4_LnJdj-KwV8PrTceQrpXM/edit?usp=sharing)
+
+### env
+Windows 10
+Cuda compilation tools, release 11.7, V11.7.64
+Build cuda_11.7.r11.7/compiler.31294372_0
+
+#####version
 Python 3.10.5
 
 

@@ -6,7 +6,7 @@ import os
 import cv2
 import imgsim
 import numpy as np
-
+import time
 """
 imgsimを使った画像類似度計算
 参考：https://qiita.com/john-rocky/items/12949f1408cb703df081
@@ -23,7 +23,7 @@ vtr = imgsim.Vectorizer()
 # csv保存先のフォルダ
 csv_folder = ""#r'./result/imgsim_gray/'
 # 画像のグレイスケール変換
-grayscale = True
+grayscale = False
 
 
 class DistanceList:
@@ -184,14 +184,22 @@ def img_sim_folder(files1, files2, write_csv_file_name=None):
 
 
 if __name__ == '__main__':
-    img_sim_folder(file_inou_figre, file_inou_figre,
-                   write_csv_file_name="inou_figre")
+    time_start = time.time()
+    img_sim_folder(file_inou_figre, file_inou_figre)
+    time_end = time.time()
+    print("実行時間(s) {}\n".format(time_end - time_start))
 
-    img_sim_folder(file_inou_home, file_inou_home,
-                   write_csv_file_name="inou_home")
+    time_start = time.time()
+    img_sim_folder(file_inou_home, file_inou_home)
+    time_end = time.time()
+    print("実行時間(s) {}\n".format(time_end - time_start))
 
-    img_sim_folder(file_inou_figre, file_other,
-                   write_csv_file_name="inou_figre_other")
+    time_start = time.time()
+    img_sim_folder(file_inou_figre, file_other)
+    time_end = time.time()
+    print("実行時間(s) {}\n".format(time_end - time_start))
 
-    img_sim_folder(file_inou_home, file_other,
-                   write_csv_file_name="inou_home_other")
+    time_start = time.time()
+    img_sim_folder(file_inou_home, file_other)
+    time_end = time.time()
+    print("実行時間(s) {}\n".format(time_end - time_start))
