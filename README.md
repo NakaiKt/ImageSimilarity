@@ -5,6 +5,7 @@
 [imgsim](https://docs.google.com/spreadsheets/d/1AfFsY0MBBPsuoY6UXMPSBAcimj3Dx2OeJbljOpNNv-E/edit?usp=sharing)
 [imgsim grayscale](https://docs.google.com/spreadsheets/d/1OJKaNU1Snu0cZ-YROBK7s4_LnJdj-KwV8PrTceQrpXM/edit?usp=sharing)
 [opencv_AKAZE](https://docs.google.com/spreadsheets/d/1m0ezvB1kHl9bUtQ712vXakJxpDjSlkqAbh3YHJTUAtw/edit?usp=sharing)
+[ImageHash](https://docs.google.com/spreadsheets/d/1zt39OlvDaAteIf3u6aLK3i8LvTwBWJxdt8i9FIOabac/edit?usp=sharing)
 
 ### env
 Cuda compilation tools, release 11.7, V11.7.64

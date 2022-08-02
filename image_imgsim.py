@@ -1,18 +1,19 @@
-import csv
-from genericpath import isfile
+"""
+参考：https://qiita.com/john-rocky/items/12949f1408cb703df081
+公式：https://libraries.io/pypi/imgsim
+AugNet：https://arxiv.org/abs/2106.06250
+
+imgsimを使った画像類似度計算
+"""
 import glob
 import os
+import time
 
 import cv2
 import imgsim
 import numpy as np
-import time
-"""
-imgsimを使った画像類似度計算
-参考：https://qiita.com/john-rocky/items/12949f1408cb703df081
-公式：https://libraries.io/pypi/imgsim
-AugNet：https://arxiv.org/abs/2106.06250
-"""
+
+from utils import write_csv
 
 file_inou_figre = glob.glob("./images/inou_figre/*.png")
 file_inou_home = glob.glob("./images/inou_home/*.png")
@@ -21,7 +22,7 @@ file_other = glob.glob("./images/other/*.png")
 vtr = imgsim.Vectorizer()
 
 # csv保存先のフォルダ
-csv_folder = ""#r'./result/imgsim_gray/'
+csv_folder = ""  # r'./result/imgsim_gray/'
 # 画像のグレイスケール変換
 grayscale = False
 
@@ -106,12 +107,6 @@ class DistanceList:
         return self.dist_default(vec1, vec2)
 
 
-def write_csv(file_name, matrix):
-    f = open(file_name, 'w')
-    writer = csv.writer(f)
-    writer.writerows(matrix)
-    f.close()
-
 def convert_grayscale_3channel(img):
     """
     カラー画像をgrayscale画像に変換し
@@ -125,6 +120,7 @@ def convert_grayscale_3channel(img):
     """
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     return cv2.merge([img, img, img])
+
 
 def img_sim_folder(files1, files2, write_csv_file_name=None):
     """

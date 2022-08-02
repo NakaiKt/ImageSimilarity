@@ -1,22 +1,23 @@
 """
-参考 : https://www.pc-koubou.jp/magazine/43855
+参考：https://self-development.info/%E3%80%90python%E3%80%91%E7%94%BB%E5%83%8F%E3%81%AE%E9%A1%9E%E4%BC%BC%E5%BA%A6%E6%AF%94%E8%BC%83%E3%81%8C%E5%8F%AF%E8%83%BD%E3%81%AAimagehash%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC/
 
-opencvのAKAZEアルゴリズムを使った類似度
+ImageHashを使った類似度
 """
+
 import glob
 import os
 import time
 
-import cv2
+import imagehash
+from PIL import Image
 
 from utils import write_csv
 
 file_inou_figre = glob.glob("./images/inou_figre/*.png")
 file_inou_home = glob.glob("./images/inou_home/*.png")
 file_other = glob.glob("./images/other/*.png")
-csv_folder = ""
 
-IMG_SIZE = (224, 224)  # 200
+csv_folder = ""
 
 
 def img_sim_folder(files1, files2, write_csv_file_name=None):
@@ -33,6 +34,7 @@ def img_sim_folder(files1, files2, write_csv_file_name=None):
     Return:
         list : 距離
     """
+
     dist_matrix = []
     max_dist = 0
     min_dist = 10000
@@ -41,33 +43,18 @@ def img_sim_folder(files1, files2, write_csv_file_name=None):
         file_name1 = os.path.basename(file1)[0]
         dist_row = [file_name1]
         for file2 in files2:
-            # ファイル読み込み（グレースケール）
-            img1 = cv2.imread(file1, cv2.IMREAD_GRAYSCALE)
-            img2 = cv2.imread(file2, cv2.IMREAD_GRAYSCALE)
-            # 画像リサイズ
-            img1 = cv2.resize(img1, IMG_SIZE)
-            img2 = cv2.resize(img2, IMG_SIZE)
+            # ハッシュ値計算
+            hash = imagehash.average_hash(Image.open(file1))
+            otherhash = imagehash.average_hash(Image.open(file2))
 
-            # Brute-Foce Matcherによる総当たりマッチングで距離の平均を出す
-            bf = cv2.BFMatcher(cv2.NORM_HAMMING)
+            dist = hash - otherhash
 
-            # AKAZEを適用して特徴点検出
-            detector = cv2.AKAZE_create()
-            kernel_point1, distance1 = detector.detectAndCompute(img1, None)
-            kernel_point2, distance2 = detector.detectAndCompute(img2, None)
+            if max_dist < dist:
+                max_dist = dist
+            if min_dist > dist:
+                min_dist = dist
 
-            # BF matchで総当りマッチング
-            matches = bf.match(distance1, distance2)
-            # 距離の和を取り平均を算出
-            dist = [m.distance for m in matches]
-            ret = sum(dist) / len(dist)
-
-            if max_dist < ret:
-                max_dist = ret
-            if min_dist > ret:
-                min_dist = ret
-
-            dist_row.append(ret)
+            dist_row.append(dist)
         dist_matrix.append(dist_row)
 
     print("最大類似距離 : {}\n最小類似距離 : {}".format(max_dist, min_dist))
@@ -77,6 +64,7 @@ def img_sim_folder(files1, files2, write_csv_file_name=None):
 
     if write_csv_file_name is not None:
         write_csv(csv_folder + write_csv_file_name + ".csv", dist_matrix)
+
     return dist_matrix
 
 
