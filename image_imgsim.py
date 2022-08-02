@@ -1,9 +1,11 @@
-import cv2
-import imgsim
+import csv
+from genericpath import isfile
 import glob
 import os
+
+import cv2
+import imgsim
 import numpy as np
-import csv
 
 """
 imgsimを使った画像類似度計算
@@ -18,12 +20,18 @@ file_other = glob.glob("./images/other/*.png")
 
 vtr = imgsim.Vectorizer()
 
+# csv保存先のフォルダ
+csv_folder = ""#r'./result/imgsim_gray/'
+# 画像のグレイスケール変換
+grayscale = True
+
 
 class DistanceList:
     """
     ベクトル間の距離を測るクラス
     """
-    def __init__(self, dist_mode = "default"):
+
+    def __init__(self, dist_mode="default"):
         if dist_mode == "default":
             self.dist = self.dist_default
         elif dist_mode == "norm":
@@ -47,8 +55,8 @@ class DistanceList:
         Returns:
             ndarray: normalized v
         """
-        l2 = np.linalg.norm(v, ord = order, axis=axis, keepdims=True)
-        l2[l2==0] = 1
+        l2 = np.linalg.norm(v, ord=order, axis=axis, keepdims=True)
+        l2[l2 == 0] = 1
         v = v / l2
         return v
 
@@ -97,22 +105,37 @@ class DistanceList:
 
         return self.dist_default(vec1, vec2)
 
+
 def write_csv(file_name, matrix):
-    with open(file_name, 'w') as f:
-        writer = csv.writer(f)
-        writer.writerows(matrix)
+    f = open(file_name, 'w')
+    writer = csv.writer(f)
+    writer.writerows(matrix)
     f.close()
 
-def img_sim_folder(files1, files2, write = False):
+def convert_grayscale_3channel(img):
+    """
+    カラー画像をgrayscale画像に変換し
+    （無理やり）3チャンネルにする
+
+    Args:
+        img (cv2image): cv2.imreadで読み込んだ画像
+
+    Returns:
+        cv2image: 各チャンネルすべての値が同じcv2image
+    """
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    return cv2.merge([img, img, img])
+
+def img_sim_folder(files1, files2, write_csv_file_name=None):
     """
     フォルダ内の画像に対して，距離を走査によって取得する関数
     距離は最大距離と最小距離が表示され，write optionによって
     すべての距離を表示できる
 
     Args:
-        files1 (glob): _description_
-        files2 (glob): _description_
-        write (bool, optional): _description_. Defaults to False.
+        files1 (glob): 1つ目の画像郡
+        files2 (glob): 2つ目の画像郡
+
 
     Return:
         list : 距離
@@ -132,15 +155,15 @@ def img_sim_folder(files1, files2, write = False):
         for file2 in files2:
             img1 = cv2.imread(file1)
             img2 = cv2.imread(file2)
+            if grayscale:
+                img1 = convert_grayscale_3channel(img1)
+                img2 = convert_grayscale_3channel(img2)
 
             vec1 = vtr.vectorize(img1)
             vec2 = vtr.vectorize(img2)
             dist = distance.dist(vec1, vec2)
 
-            file_name2 = os.path.basename(file2)[0]
-
-            if write:
-                print("{} : {} = {}".format(file_name1, file_name2, dist))
+            #print("{} : {} = {}".format(file_name1, file_name2, dist))
 
             if max_dist < dist:
                 max_dist = dist
@@ -151,28 +174,24 @@ def img_sim_folder(files1, files2, write = False):
         dist_matrix.append(dist_row)
     print("最大類似距離 : {}\n最小類似距離 : {}".format(max_dist, min_dist))
 
-    dist_column = [ i for i in range(len(dist_row))]
+    dist_column = [i for i in range(len(dist_row))]
     dist_matrix.insert(0, dist_column)
+
+    if write_csv_file_name is not None:
+        write_csv(csv_folder + write_csv_file_name + ".csv", dist_matrix)
+
     return dist_matrix
 
+
 if __name__ == '__main__':
-    csv_folder = "/result/imgsim/"
-    table_name = "inou_figre"
-    print(table_name)
-    matrix = img_sim_folder(file_inou_figre, file_inou_figre)
-    write_csv(csv_folder + table_name + ".csv", matrix)
+    img_sim_folder(file_inou_figre, file_inou_figre,
+                   write_csv_file_name="inou_figre")
 
-    table_name = "inou_home"
-    print("\n", table_name)
-    matrix = img_sim_folder(file_inou_home, file_inou_home)
-    write_csv(csv_folder + table_name + ".csv", matrix)
+    img_sim_folder(file_inou_home, file_inou_home,
+                   write_csv_file_name="inou_home")
 
-    table_name = "inou_figre_other"
-    print("\n", table_name)
-    matrix = img_sim_folder(file_inou_figre, file_other)
-    write_csv(csv_folder + table_name + ".csv", matrix)
+    img_sim_folder(file_inou_figre, file_other,
+                   write_csv_file_name="inou_figre_other")
 
-    table_name = "inou_home_other"
-    print("\n", table_name)
-    matrix = img_sim_folder(file_inou_home, file_other)
-    write_csv(csv_folder + table_name + ".csv", matrix)
+    img_sim_folder(file_inou_home, file_other,
+                   write_csv_file_name="inou_home_other")
